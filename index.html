@@ -1,116 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Days Alive & Daily Quote</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Roboto:wght@300;400;700&display=swap');
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: linear-gradient(-45deg, #84fab0, #8fd3f4, #a18cd1, #fbc2eb);
-      background-size: 400% 400%;
-      animation: gradientBG 12s ease infinite;
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .container {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      backdrop-filter: blur(10px);
-      max-width: 600px;
-      width: 100%;
-      animation: fadeIn 1.5s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3.5em;
-      margin: 0.2em 0;
-      font-weight: 500;
-    }
-    p {
-      font-size: 1.2em;
-      opacity: 0.9;
-    }
-    .quote {
-      font-style: italic;
-      margin-top: 20px;
-      font-size: 1.4em;
-      line-height: 1.5;
-      opacity: 0;
-      animation: fadeQuote 2s ease forwards;
-      animation-delay: 1.5s;
-    }
-    .author {
-      margin-top: 10px;
-      font-size: 1.1em;
-      opacity: 0.8;
-    }
-    @keyframes fadeQuote {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Days Alive & Daily Hadith Quote</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Roboto:wght@300;400;700&display=swap');
+
+  :root{
+    --card-bg: rgba(255,255,255,0.16);
+    --card-br: 24px;
+    --shadow: 0 10px 40px rgba(0,0,0,0.25);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    font-family:'Roboto',system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+    color:#fff;
+    text-align:center;
+    background: linear-gradient(-45deg,#84fab0,#8fd3f4,#a18cd1,#fbc2eb);
+    background-size:400% 400%;
+    animation: gradientBG 14s ease infinite;
+  }
+  @keyframes gradientBG{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+  .card{
+    width:min(800px,100%);
+    background:var(--card-bg);
+    border-radius:var(--card-br);
+    box-shadow:var(--shadow);
+    backdrop-filter: blur(12px);
+    padding:32px 28px;
+    animation: rise 1s ease both;
+  }
+  @keyframes rise{
+    from{opacity:0; transform: translateY(18px)}
+    to{opacity:1; transform: translateY(0)}
+  }
+  h1{
+    margin:0 0 8px;
+    font-family:'Playfair Display',serif;
+    font-size: clamp(32px, 6vw, 54px);
+    font-weight:500;
+    letter-spacing:.2px;
+  }
+  .range{
+    margin:0 0 18px;
+    font-size: clamp(14px, 2.4vw, 18px);
+    opacity:.9;
+  }
+  .quote{
+    margin:18px auto 8px;
+    font-size: clamp(18px, 3vw, 24px);
+    line-height:1.5;
+    font-style: italic;
+    opacity:0;
+    transform: translateY(6px);
+    animation: fadeIn 800ms ease forwards;
+    max-width: 42ch;
+  }
+  @keyframes fadeIn{
+    to{opacity:1; transform:none}
+  }
+  .author{
+    opacity:.85;
+    margin-top:6px;
+    font-size: clamp(14px,2.2vw,16px);
+  }
+  .controls{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:22px;
+    flex-wrap:wrap;
+  }
+  button{
+    border:0;
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-size: 15px;
+    cursor:pointer;
+    background:#ffffff;
+    color:#333;
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  }
+  button:hover{ transform: translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,.22) }
+  button:active{ transform: translateY(0); box-shadow:0 6px 18px rgba(0,0,0,.18) }
+  .small{
+    opacity:.85;
+    background: rgba(255,255,255,.9);
+  }
+  footer{
+    margin-top:18px;
+    font-size: 12px;
+    opacity:.8;
+  }
+</style>
 </head>
 <body>
 
-<div class="container">
+<div class="card">
   <h1 id="daysAlive">0</h1>
-  <p id="dateRange"></p>
-  <div class="quote" id="quote">Loading quote...</div>
-  <div class="author" id="author"></div>
+  <p class="range" id="dateRange"></p>
+
+  <div class="quote" id="quote">Loading…</div>
+  <div class="author" id="author">— Prophet Muhammad ﷺ (Hadith)</div>
+
+  <div class="controls">
+    <button id="shuffleBtn" aria-label="Show another quote">New quote</button>
+    <button id="copyBtn" class="small" aria-label="Copy quote to clipboard">Copy</button>
+  </div>
+
+  <footer>
+    Translations are brief paraphrases for reflection.
+  </footer>
 </div>
 
 <script>
-  // === Configuration ===
-  const birthday = new Date("1999-12-31"); // ← Set your birthday here
+  // ======= CONFIGURE YOUR BIRTHDAY HERE =======
+  const birthday = new Date("1999-12-31"); // ← change to your birthday (YYYY-MM-DD)
 
-  // === Calculate Days Alive & Animate Counter ===
+  // ======= DAYS ALIVE (with animated count) =======
   const today = new Date();
   const daysAlive = Math.floor((today - birthday) / (1000*60*60*24));
-  document.getElementById("dateRange").textContent =
-    `From ${birthday.toDateString()} to ${today.toDateString()}`;
+  const daysEl = document.getElementById("daysAlive");
+  const rangeEl = document.getElementById("dateRange");
+
+  rangeEl.textContent = `From ${birthday.toDateString()} to ${today.toDateString()}`;
 
   let count = 0;
-  const counterEl = document.getElementById("daysAlive");
-  const speed = Math.max(1, Math.floor(daysAlive / 100));
-  const interval = setInterval(() => {
+  const speed = Math.max(1, Math.floor(daysAlive / 120));
+  const ticker = setInterval(() => {
     count += speed;
-    if (count >= daysAlive) {
-      count = daysAlive;
-      clearInterval(interval);
-    }
-    counterEl.textContent = `${count} days alive`;
-  }, 20);
+    if (count >= daysAlive) { count = daysAlive; clearInterval(ticker); }
+    daysEl.textContent = `${count.toLocaleString()} days alive`;
+  }, 18);
 
-  // === Fetch Quote from Inspiration API (supports CORS) ===
-  fetch('https://inspiration.gopro.fans/api') // endpoint from Inspiration API
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("quote").textContent = `"${data.quote}"`;
-      document.getElementById("author").textContent = data.author ? `— ${data.author}` : '';
-    })
-    .catch(err => {
-      console.error(err);
-      document.getElementById("quote").textContent = "Could not fetch quote today.";
-    });
+  // ======= 100 Hadith Quotes (paraphrased) =======
+  const hadithQuotes = [
+    "Actions are judged by intentions.",
+    "Smiling at your brother is charity.",
+    "The best of you are those who learn the Qur’an and teach it.",
+    "Make things easy and do not make them difficult; give glad tidings and do not drive people away.",
+    "Allah does not look at your appearance or wealth, but at your hearts and deeds.",
+    "Whoever believes in Allah and the Last Day should speak good or remain silent.",
+    "The strong one is the one who controls himself when angry.",
+    "A believer is not a slanderer, nor one who curses or speaks indecently.",
+    "Give gifts to one another and love will grow between you.",
+    "He is not a believer whose stomach is filled while his neighbor goes hungry.",
+    "The most perfect believers in faith are those best in character.",
+    "Gentleness beautifies whatever it enters, and harshness mars it.",
+    "Allah is gentle and loves gentleness in all matters.",
+    "The most beloved deeds to Allah are those done regularly, even if small.",
+    "Whoever does not thank people has not thanked Allah.",
+    "He who does not show mercy will not be shown mercy.",
+    "None of you truly believes until he loves for his brother what he loves for himself.",
+    "Purity is half of faith.",
+    "Modesty is part of faith.",
+    "Seeking knowledge is an obligation upon every Muslim.",
+    "Be mindful of Allah and He will protect you.",
+    "Tie your camel and then place your trust in Allah.",
+    "The best of you are those who are best to their families.",
+    "Whoever seeks to be patient, Allah will grant him patience.",
+    "Spread peace among yourselves.",
+    "Feed the hungry, visit the sick, and free the captives.",
+    "The upper hand is better than the lower hand.",
+    "Charity does not decrease wealth.",
+    "Whoever relieves a believer’s hardship, Allah will relieve his hardship on the Day of Resurrection.",
+    "The most beloved people to Allah are those who are most beneficial to people.",
+    "The world is a prison for the believer and a paradise for the disbeliever.",
+    "Be in this world as a stranger or a traveler.",
+    "A Muslim is one from whose tongue and hand people are safe.",
+    "The religion is sincere counsel.",
+    "Part of a person’s perfection of Islam is leaving what does not concern him.",
+    "The closest a servant is to his Lord is while prostrating.",
+    "The most beloved deed to Allah is prayer at its proper time.",
+    "Allah is beautiful and loves beauty.",
+    "Excellence (ihsan) is prescribed in all things.",
+    "The rights of a Muslim over another are five: return the greeting, visit the sick, follow the funeral, accept invitations, and pray for the sneezer.",
+    "Beware of suspicion, for suspicion is the falsest of talk.",
+    "Do not be angry.",
+    "Whoever guides to good has a reward like the one who does it.",
+    "Feeding a hungry person is charity.",
+    "Whoever conceals the faults of a Muslim, Allah will conceal his faults in this world and the Hereafter.",
+    "Whoever makes things easy for one in hardship, Allah will make things easy for him in this world and the Hereafter.",
+    "Whoever is deprived of gentleness is deprived of goodness.",
+    "A good word is charity.",
+    "Reconciling between people is charity.",
+    "The supplication of a Muslim for his brother in his absence is answered.",
+    "I and the one who cares for an orphan will be in Paradise like this.",
+    "Whoever cares for two daughters until maturity will be with me on the Day of Resurrection like these two.",
+    "The best of you are those who are best to their women.",
+    "The believer is the mirror of his brother.",
+    "Whoever maintains the ties of kinship, Allah will maintain ties with him.",
+    "The truthful, trustworthy merchant will be with the Prophets, the truthful, and the martyrs.",
+    "There is to be neither harming nor reciprocating harm.",
+    "Allah is pure and accepts only what is pure.",
+    "Whoever believes in Allah and the Last Day should honor his guest.",
+    "Do not belittle any good deed, even meeting your brother with a cheerful face.",
+    "The most beloved places to Allah are the mosques, and the most disliked are the markets.",
+    "Prayer is light.",
+    "Charity is proof.",
+    "Patience is illumination.",
+    "The Qur’an is an argument for you or against you.",
+    "If you feel no shame, then do as you wish.",
+    "The best remembrance is: ‘La ilaha illa Allah’.",
+    "The best supplication is: ‘Alhamdulillah’.",
+    "Fasting is a shield.",
+    "There are two blessings which many people lose: health and free time.",
+    "The one who severs family ties will not enter Paradise.",
+    "Whoever sees an evil, let him change it with his hand; if he cannot, then with his tongue; and if he cannot, then with his heart.",
+    "The most beloved words to Allah are: ‘SubhanAllahi wa bihamdihi’.",
+    "The best of you are those who are best in paying off their debts.",
+    "When Allah wants good for someone, He grants him understanding of the religion.",
+    "Let whoever believes in Allah and the Last Day not harm his neighbor.",
+    "The believers in their love, mercy, and compassion are like one body.",
+    "Keep your tongue moist with the remembrance of Allah.",
+    "Allah is more merciful to His servants than a mother to her child.",
+    "Wealth is not abundance of possessions, but richness of the soul.",
+    "The best of Islam is to feed others and greet those you know and those you do not know.",
+    "Allah accepts the repentance of His servant so long as the soul has not reached the throat.",
+    "Whoever humbles himself for Allah, Allah will raise him.",
+    "Do not envy one another, do not hate one another; be servants of Allah as brothers.",
+    "Visiting the sick: whoever visits is walking among the gardens of Paradise until he sits.",
+    "Help your brother whether he is an oppressor or oppressed—by stopping his oppression or aiding the oppressed.",
+    "Whoever is deprived of forbearance and patience is deprived of all good.",
+    "The best jihad is a word of truth before a tyrant.",
+    "The coolness of my eyes is in the prayer.",
+    "The one who strives to help a widow or poor person is like one who fasts by day and prays by night.",
+    "Your body has a right over you.",
+    "Be upright and seek closeness; know that you will not be perfect, so be steadfast.",
+    "The best of your days is Friday.",
+    "The best charity is that given while you are healthy and hoping to keep wealth.",
+    "Allah has more joy at the repentance of His servant than a man who finds his lost mount in a desert.",
+    "Whoever removes something harmful from the road, it is charity.",
+    "The believer is gentle and easy to approach.",
+    "Allah loves kindness in all affairs.",
+    "Whoever pardons, Allah increases him in honor.",
+    "The most beloved of deeds to Allah is to bring joy to a Muslim.",
+    "Give the worker his wages before his sweat dries.",
+    "Whoever follows a path seeking knowledge, Allah makes a path to Paradise easy for him.",
+    "The nearest people to me on the Day of Resurrection are the best of you in character.",
+    "Exchange greetings of peace; you will love one another.",
+    "Righteousness is good character; sin is what wavers in your heart and you dislike that people come to know of it.",
+    "Leave what makes you doubt for what does not make you doubt.",
+    "The upper hand is the giving hand.",
+    "Allah loves those who are just.",
+    "Whoever believes in Allah and the Last Day, let him keep ties of kinship.",
+    "A cheerful face to your brother is charity.",
+    "Allah loves those deeds that are consistent, even if small."
+  ]; // 100 entries
+
+  const quoteEl = document.getElementById("quote");
+  const authorEl = document.getElementById("author");
+  const shuffleBtn = document.getElementById("shuffleBtn");
+  const copyBtn = document.getElementById("copyBtn");
+
+  // Deterministic daily index (changes each day) + option to shuffle
+  const dailySeed = Number(new Date().toISOString().slice(0,10).replace(/-/g,'')) + daysAlive;
+  function pickIndex(seed){
+    // simple LCG for deterministic “random”
+    let x = (seed * 9301 + 49297) % 233280;
+    return Math.floor((x / 233280) * hadithQuotes.length);
+  }
+  let currentIndex = pickIndex(dailySeed);
+
+  function showQuote(idx){
+    currentIndex = (idx + hadithQuotes.length) % hadithQuotes.length;
+    quoteEl.style.opacity = 0;
+    quoteEl.style.transform = 'translateY(6px)';
+    setTimeout(()=>{
+      quoteEl.textContent = "“" + hadithQuotes[currentIndex] + "”";
+      authorEl.textContent = "— Prophet Muhammad ﷺ (Hadith)";
+      quoteEl.style.opacity = 1;
+      quoteEl.style.transform = 'translateY(0)';
+    },120);
+  }
+
+  function shuffleQuote(){
+    // pick a different index than current
+    let idx;
+    do { idx = Math.floor(Math.random()*hadithQuotes.length); } while(idx === currentIndex && hadithQuotes.length>1);
+    showQuote(idx);
+  }
+
+  shuffleBtn.addEventListener('click', shuffleQuote);
+
+  copyBtn.addEventListener('click', async () => {
+    const text = `${quoteEl.textContent} ${authorEl.textContent}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtn.textContent = "Copied!";
+      setTimeout(()=> copyBtn.textContent = "Copy", 1400);
+    } catch {
+      copyBtn.textContent = "Copy failed";
+      setTimeout(()=> copyBtn.textContent = "Copy", 1400);
+    }
+  });
+
+  // initial render
+  showQuote(currentIndex);
 </script>
 
 </body>
