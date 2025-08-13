@@ -5,69 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Days Alive & Daily Quote</title>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Roboto:wght@300;400;700&display=swap');
+
     body {
-        font-family: 'Segoe UI', Tahoma, sans-serif;
-        background: linear-gradient(135deg, #84fab0, #8fd3f4);
-        color: #333;
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        margin: 0;
+        background: linear-gradient(-45deg, #84fab0, #8fd3f4, #a18cd1, #fbc2eb);
+        background-size: 400% 400%;
+        animation: gradientBG 12s ease infinite;
+        color: #fff;
         text-align: center;
         padding: 20px;
     }
-    h1 {
-        font-size: 3em;
-        margin: 0.2em 0;
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
-    p {
-        font-size: 1.5em;
+
+    .container {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        backdrop-filter: blur(10px);
         max-width: 600px;
+        width: 100%;
+        animation: fadeIn 1.5s ease;
     }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5em;
+        margin: 0.2em 0;
+        font-weight: 500;
+    }
+
+    p {
+        font-size: 1.2em;
+        opacity: 0.9;
+    }
+
     .quote {
         font-style: italic;
         margin-top: 20px;
-        font-size: 1.2em;
-        max-width: 600px;
+        font-size: 1.4em;
+        line-height: 1.5;
+        opacity: 0;
+        animation: fadeQuote 2s ease forwards;
+        animation-delay: 1.5s;
     }
+
     .author {
-        margin-top: 5px;
-        font-size: 1em;
-        color: #555;
+        margin-top: 10px;
+        font-size: 1.1em;
+        opacity: 0.8;
+    }
+
+    @keyframes fadeQuote {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 </head>
 <body>
 
-<h1 id="daysAlive"></h1>
-<p id="dateRange"></p>
-<div class="quote" id="quote">Loading quote...</div>
-<div class="author" id="author"></div>
+<div class="container">
+    <h1 id="daysAlive">0</h1>
+    <p id="dateRange"></p>
+    <div class="quote" id="quote">Loading quote...</div>
+    <div class="author" id="author"></div>
+</div>
 
 <script>
-    // === CONFIGURATION ===
-    const birthday = new Date("1999-12-31"); //
-
-    // === CALCULATE DAYS ALIVE ===
+    const birthday = new Date("1995-06-15"); // <-- Change to your birthday
     const today = new Date();
     const diffTime = today - birthday;
     const daysAlive = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    document.getElementById("daysAlive").textContent = `${daysAlive} days alive`;
-    document.getElementById("dateRange").textContent = `From ${birthday.toDateString()} to ${today.toDateString()}`;
+    document.getElementById("dateRange").textContent =
+        `From ${birthday.toDateString()} to ${today.toDateString()}`;
 
-    // === FETCH QUOTE FROM ZENQUOTES API ===
-    fetch('https://zenquotes.io/api/today')
-      .then(res => res.json())
-      .then(data => {
+    // Animate number count
+    let count = 0;
+    const counterElement = document.getElementById("daysAlive");
+    const speed = Math.max(1, Math.floor(daysAlive / 100)); // adjust animation speed
+    const counterInterval = setInterval(() => {
+        count += speed;
+        if (count >= daysAlive) {
+            count = daysAlive;
+            clearInterval(counterInterval);
+        }
+        counterElement.textContent = `${count} days alive`;
+    }, 20);
+
+    // JSONP callback
+    function handleQuote(data) {
         document.getElementById("quote").textContent = `"${data[0].q}"`;
         document.getElementById("author").textContent = `— ${data[0].a}`;
-      })
-      .catch(() => {
-        document.getElementById("quote").textContent = "Unable to fetch today's quote.";
-      });
+    }
+
+    // Inject JSONP script
+    const script = document.createElement('script');
+    script.src = 'https://zenquotes.io/api/today/jsonp?callback=handleQuote';
+    document.body.appendChild(script);
 </script>
 
 </body>
