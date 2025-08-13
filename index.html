@@ -1,124 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Days Alive & Daily Quote</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Days Alive & Daily Quote</title>
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Roboto:wght@300;400;700&display=swap');
-
     body {
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: linear-gradient(-45deg, #84fab0, #8fd3f4, #a18cd1, #fbc2eb);
-        background-size: 400% 400%;
-        animation: gradientBG 12s ease infinite;
-        color: #fff;
-        text-align: center;
-        padding: 20px;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(-45deg, #84fab0, #8fd3f4, #a18cd1, #fbc2eb);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
     }
-
     @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-
     .container {
-        background: rgba(255, 255, 255, 0.15);
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        backdrop-filter: blur(10px);
-        max-width: 600px;
-        width: 100%;
-        animation: fadeIn 1.5s ease;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      max-width: 600px;
+      width: 100%;
+      animation: fadeIn 1.5s ease;
     }
-
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
     h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 3.5em;
-        margin: 0.2em 0;
-        font-weight: 500;
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5em;
+      margin: 0.2em 0;
+      font-weight: 500;
     }
-
     p {
-        font-size: 1.2em;
-        opacity: 0.9;
+      font-size: 1.2em;
+      opacity: 0.9;
     }
-
     .quote {
-        font-style: italic;
-        margin-top: 20px;
-        font-size: 1.4em;
-        line-height: 1.5;
-        opacity: 0;
-        animation: fadeQuote 2s ease forwards;
-        animation-delay: 1.5s;
+      font-style: italic;
+      margin-top: 20px;
+      font-size: 1.4em;
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeQuote 2s ease forwards;
+      animation-delay: 1.5s;
     }
-
     .author {
-        margin-top: 10px;
-        font-size: 1.1em;
-        opacity: 0.8;
+      margin-top: 10px;
+      font-size: 1.1em;
+      opacity: 0.8;
     }
-
     @keyframes fadeQuote {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-</style>
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 id="daysAlive">0</h1>
-    <p id="dateRange"></p>
-    <div class="quote" id="quote">Loading quote...</div>
-    <div class="author" id="author"></div>
+  <h1 id="daysAlive">0</h1>
+  <p id="dateRange"></p>
+  <div class="quote" id="quote">Loading quote...</div>
+  <div class="author" id="author"></div>
 </div>
 
 <script>
-    const birthday = new Date("1995-06-15"); // <-- Change to your birthday
-    const today = new Date();
-    const diffTime = today - birthday;
-    const daysAlive = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  // === Configuration ===
+  const birthday = new Date("19999-12-31"); // ← Set your birthday here
 
-    document.getElementById("dateRange").textContent =
-        `From ${birthday.toDateString()} to ${today.toDateString()}`;
+  // === Calculate Days Alive & Animate Counter ===
+  const today = new Date();
+  const daysAlive = Math.floor((today - birthday) / (1000*60*60*24));
+  document.getElementById("dateRange").textContent =
+    `From ${birthday.toDateString()} to ${today.toDateString()}`;
 
-    // Animate number count
-    let count = 0;
-    const counterElement = document.getElementById("daysAlive");
-    const speed = Math.max(1, Math.floor(daysAlive / 100)); // adjust animation speed
-    const counterInterval = setInterval(() => {
-        count += speed;
-        if (count >= daysAlive) {
-            count = daysAlive;
-            clearInterval(counterInterval);
-        }
-        counterElement.textContent = `${count} days alive`;
-    }, 20);
-
-    // JSONP callback
-    function handleQuote(data) {
-        document.getElementById("quote").textContent = `"${data[0].q}"`;
-        document.getElementById("author").textContent = `— ${data[0].a}`;
+  let count = 0;
+  const counterEl = document.getElementById("daysAlive");
+  const speed = Math.max(1, Math.floor(daysAlive / 100));
+  const interval = setInterval(() => {
+    count += speed;
+    if (count >= daysAlive) {
+      count = daysAlive;
+      clearInterval(interval);
     }
+    counterEl.textContent = `${count} days alive`;
+  }, 20);
 
-    // Inject JSONP script
-    const script = document.createElement('script');
-    script.src = 'https://zenquotes.io/api/today/jsonp?callback=handleQuote';
-    document.body.appendChild(script);
+  // === Fetch Quote from Inspiration API (supports CORS) ===
+  fetch('https://inspiration.gopro.fans/api') // endpoint from Inspiration API
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("quote").textContent = `"${data.quote}"`;
+      document.getElementById("author").textContent = data.author ? `— ${data.author}` : '';
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById("quote").textContent = "Could not fetch quote today.";
+    });
 </script>
 
 </body>
