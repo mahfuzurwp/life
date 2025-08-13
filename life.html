@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Days Alive & Daily Quote</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: linear-gradient(135deg, #84fab0, #8fd3f4);
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        text-align: center;
+        padding: 20px;
+    }
+    h1 {
+        font-size: 3em;
+        margin: 0.2em 0;
+    }
+    p {
+        font-size: 1.5em;
+        max-width: 600px;
+    }
+    .quote {
+        font-style: italic;
+        margin-top: 20px;
+        font-size: 1.2em;
+        max-width: 600px;
+    }
+    .author {
+        margin-top: 5px;
+        font-size: 1em;
+        color: #555;
+    }
+</style>
+</head>
+<body>
+
+<h1 id="daysAlive"></h1>
+<p id="dateRange"></p>
+<div class="quote" id="quote">Loading quote...</div>
+<div class="author" id="author"></div>
+
+<script>
+    // === CONFIGURATION ===
+    const birthday = new Date("1999-12-31"); //
+
+    // === CALCULATE DAYS ALIVE ===
+    const today = new Date();
+    const diffTime = today - birthday;
+    const daysAlive = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    document.getElementById("daysAlive").textContent = `${daysAlive} days alive`;
+    document.getElementById("dateRange").textContent = `From ${birthday.toDateString()} to ${today.toDateString()}`;
+
+    // === FETCH QUOTE FROM ZENQUOTES API ===
+    fetch('https://zenquotes.io/api/today')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("quote").textContent = `"${data[0].q}"`;
+        document.getElementById("author").textContent = `— ${data[0].a}`;
+      })
+      .catch(() => {
+        document.getElementById("quote").textContent = "Unable to fetch today's quote.";
+      });
+</script>
+
+</body>
+</html>
